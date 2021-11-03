@@ -1,6 +1,6 @@
 # Azure Marketplace VM with CreateUIDefinition
 
-[![Deploy To Azure](https://raw.githubusercontent.com/gamullen/Moore/tree/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgamullen%2FMoore%2Ftree%2Fmaster%2FMoore%2Fazuredeploy.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fgamullen%2Moore%2Ftree%2Fmaster%2FMoore%2FcreateUiDefinition.json)
+[![Deploy To Azure](https://raw.githubusercontent.com/gamullen/Moore/blob/master/Moore/assets/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgamullen%2FMoore%2Ftree%2Fmaster%2FMoore%2Fazuredeploy.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fgamullen%2Moore%2Ftree%2Fmaster%2FMoore%2FcreateUiDefinition.json)
 
 This template allows deploying a linux VM using new or existing resources for the Virtual Network, Storage and Public IP Address.  It also allows for choosing between SSH and Password authentication.  The templates uses conditions and logic functions to remove the need for nested deployments.
 
