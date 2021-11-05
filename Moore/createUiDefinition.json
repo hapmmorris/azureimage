@@ -4,16 +4,29 @@
     "version": "0.1.2-preview",
     "parameters": {
         "basics": [
+            
             {
                 "name": "vmName",
                 "type": "Microsoft.Common.TextBox",
                 "label": "Virtual Machine name",
-                "toolTip": "The name of the Virtual Machine.",
+                "toolTip": "The name of the Virtual Machine. Must start with 'contoso'.",
                 "defaultValue": "linux-vm",
                 "constraints": {
                     "required": true,
-                    "regex": "^[a-z0-9A-Z-]{3,79}$",
-                    "validationMessage": "The VM Name must be between 3 and 79 characters long and contain letters, numbers and hyphens only."
+                    "validations": [
+                        {
+                            "regex": "^[a-z0-9A-Z]{1,30}$",
+                            "message": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        {
+                            "isValid": "[startsWith(steps('resourceConfig').nameInstance, 'contoso')]",
+                            "message": "Must start with 'contoso'."
+                        },
+                        {
+                            "isValid": "[not(equals(basics('nameApi').nameAvailable, false))]",
+                            "message": "[concat('Name unavailable: ', basics('vmName'))]"
+                        }
+                    ]
                 }
             },
             {
@@ -149,33 +162,28 @@
             }
         ],
         "outputs": {
-
             "location": "[location()]",
             "vmName": "[basics('vmName')]",
             "adminUsername": "[basics('adminUsername')]",
             "authenticationType": "[basics('SSHCredentials').authenticationType]",
             "adminPasswordOrKey": "[coalesce(basics('SSHCredentials').password, basics('SSHCredentials').sshPublicKey)]",
-
             "vmSize": "[steps('VirtualMachineConfig').vmSize]",
             "storageNewOrExisting": "[steps('VirtualMachineConfig').storageAccount.newOrExisting]",
             "storageAccountName": "[steps('VirtualMachineConfig').storageAccount.name]",
             "storageAccountType": "[steps('VirtualMachineConfig').storageAccount.type]",
             "storageAccountResourceGroupName": "[steps('VirtualMachineConfig').storageAccount.resourceGroup]",
-
             "virtualNetworkNewOrExisting": "[steps('VirtualMachineConfig').virtualNetwork.newOrExisting]",
             "virtualNetworkName": "[steps('VirtualMachineConfig').virtualNetwork.name]",
             "addressPrefixes": "[steps('VirtualMachineConfig').virtualNetwork.addressPrefixes]",
             "subnetName": "[steps('VirtualMachineConfig').virtualNetwork.subnets.subnet1.name]",
             "subnetPrefix": "[steps('VirtualMachineConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
             "virtualNetworkResourceGroupName": "[steps('VirtualMachineConfig').virtualNetwork.resourceGroup]",
-
             "publicIpNewOrExisting": "[steps('VirtualMachineConfig').publicIpAddress.newOrExistingOrNone]",
             "publicIpName": "[steps('VirtualMachineConfig').publicIpAddress.name]",
             "publicIpDns": "[steps('VirtualMachineConfig').publicIpAddress.domainNameLabel]",
             "publicIpResourceGroupName": "[steps('VirtualMachineConfig').publicIpAddress.resourceGroup]",
             "publicIPAllocationMethod": "[steps('VirtualMachineConfig').publicIpAddress.publicIPAllocationMethod]",
             "publicIpSku": "[steps('VirtualMachineConfig').publicIpAddress.sku]"
-
         }
     }
 }
