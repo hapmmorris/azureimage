@@ -13,19 +13,22 @@
       "type": "string",
       "metadata": {
         "description": "The name of the keyvault that contains the secret."
-      }
+      },
+      "defaultValue": "KeyvaultGary2"
     },
     "secretName": {
       "type": "string",
       "metadata": {
         "description": "The name of the secret."
-      }
+      },
+      "defaultValue": "AdminPassword"
     },
     "vaultResourceGroupName": {
       "type": "string",
       "metadata": {
         "description": "The name of the resource group that contains the keyvault."
-      }
+      },
+      "defaultValue": "HenryFord"
     },
     "vaultSubscription": {
       "type": "string",
@@ -50,7 +53,7 @@
             "value": "[parameters('location')]"
           },
           "adminLogin": {
-            "value": "ghuser"
+            "value": "admingary"
           },
           "adminPassword": {
             "reference": {
