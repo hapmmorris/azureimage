@@ -4,29 +4,16 @@
     "version": "0.1.2-preview",
     "parameters": {
         "basics": [
-            
             {
                 "name": "vmName",
                 "type": "Microsoft.Common.TextBox",
                 "label": "Virtual Machine name",
-                "toolTip": "The name of the Virtual Machine. Must start with 'contoso'.",
-                "defaultValue": "linux-vm",
+                "toolTip": "The name of the Virtual Machine.",
+                "defaultValue": "simple-vm",
                 "constraints": {
                     "required": true,
-                    "validations": [
-                        {
-                            "regex": "^[a-z0-9A-Z]{1,30}$",
-                            "message": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
-                        },
-                        {
-                            "isValid": "[startsWith(steps('resourceConfig').nameInstance, 'contoso')]",
-                            "message": "Must start with 'contoso'."
-                        },
-                        {
-                            "isValid": "[not(equals(basics('nameApi').nameAvailable, false))]",
-                            "message": "[concat('Name unavailable: ', basics('vmName'))]"
-                        }
-                    ]
+                    "regex": "^[a-z0-9A-Z-]{3,15}$",
+                    "validationMessage": "The VM Name must be between 3 and 15 characters long and contain letters, numbers and hyphens only."
                 }
             },
             {
@@ -34,32 +21,28 @@
                 "type": "Microsoft.Compute.UserNameTextBox",
                 "label": "Username",
                 "toolTip": "Admin username for the machine",
-                "osPlatform": "Linux",
+                "osPlatform": "Windows",
                 "constraints": {
                     "required": true
                 }
             },
             {
-                "name": "SSHCredentials",
-                "type": "Microsoft.Compute.CredentialsCombo",
+                "name": "password",
+                "type": "Microsoft.Common.PasswordBox",
                 "label": {
-                    "authenticationType": "Authentication type",
                     "password": "Password",
-                    "confirmPassword": "Confirm password",
-                    "sshPublicKey": "SSH public key"
+                    "confirmPassword": "Confirm password"
                 },
-                "toolTip": {
-                    "authenticationType": "Authentication Type for the Virtual Machine",
-                    "password": "Password for the Virtual Machine",
-                    "sshPublicKey": "SSH Public Key for the Virtual Machine"
-                },
+                "toolTip": "Admin password for the virtual machine",
                 "constraints": {
-                    "required": true
+                    "required": true,
+                    "regex": "^(?=.*[A-Z])(?=.*[.!@#$%^&*()-_=+])(?=.*[0-9])(?=.*[a-z]).{12,40}$",
+                    "validationMessage": "Password must be at least 12 characters long, and contain upper case, lower case, number and symbol"
                 },
                 "options": {
                     "hideConfirmation": false
                 },
-                "osPlatform": "Linux"
+                "visible": true
             }
         ],
         "steps": [
@@ -73,6 +56,75 @@
                 "bladeTitle": "Virtual Machine Settings",
                 "elements": [
                     {
+                        "name": "OSVersion",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Windows OS Version",
+                        "defaultValue": "2019-Datacenter",
+                        "toolTip": "The OS Version for the VM Image",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "value": "2008-R2-SP1",
+                                    "label": "2008-R2-SP1"
+                                },
+                                {
+                                    "value": "2012-Datacenter",
+                                    "label": "2012-Datacenter"
+                                },
+                                {
+                                    "value": "2012-R2-Datacenter",
+                                    "label": "2012-R2-Datacenter"
+                                },
+                                {
+                                    "value": "2016-Nano-Server",
+                                    "label": "2016-Nano-Server"
+                                },
+                                {
+                                    "value": "2016-Datacenter-with-Containers",
+                                    "label": "2016-Datacenter-with-Containers"
+                                },
+                                {
+                                    "value": "2016-Datacenter",
+                                    "label": "2016-Datacenter"
+                                },
+                                {
+                                    "value": "2019-Datacenter",
+                                    "label": "2019-Datacenter"
+                                },
+                                {
+                                    "value": "2019-Datacenter-Core",
+                                    "label": "2019-Datacenter-Core"
+                                },
+                                {
+                                    "value": "2019-Datacenter-Core-smalldisk",
+                                    "label": "2019-Datacenter-Core-smalldisk"
+                                },
+                                {
+                                    "value": "2019-Datacenter-Core-with-Containers",
+                                    "label": "2019-Datacenter-Core-with-Containers"
+                                },
+                                {
+                                    "value": "2019-Datacenter-Core-with-Containers-smalldisk",
+                                    "label": "2019-Datacenter-Core-with-Containers-smalldisk"
+                                },
+                                {
+                                    "value": "2019-Datacenter-smalldisk",
+                                    "label": "2019-Datacenter-smalldisk"
+                                },
+                                {
+                                    "value": "2019-Datacenter-with-Containers",
+                                    "label": "2019-Datacenter-with-Containers"
+                                },
+                                {
+                                    "value": "2019-Datacenter-with-Containers-smalldisk",
+                                    "label": "2019-Datacenter-with-Containers-smalldisk"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": true
+                    },
+                    {
                         "name": "vmSize",
                         "type": "Microsoft.Compute.SizeSelector",
                         "label": "Virtual machine size",
@@ -81,24 +133,8 @@
                             "Standard_D2_v2",
                             "Standard_A2_v2"
                         ],
-                        "osPlatform": "Linux",
+                        "osPlatform": "Windows",
                         "count": "1"
-                    },
-                    {
-                        "name": "storageAccount",
-                        "type": "Microsoft.Storage.StorageAccountSelector",
-                        "label": "Diagnostic storage account",
-                        "toolTip": "Storage Account for the Virtual Machine's diagnostics",
-                        "defaultValue": {
-                            "type": "Standard_LRS",
-                            "name": "[concat(replace(basics('vmName'), '-', ''), take(replace(guid(), '-', ''), 10))]"
-                        },
-                        "constraints": {
-                            "allowedTypes": [
-                                "Standard_LRS",
-                                "Standard_GRS"
-                            ]
-                        }
                     },
                     {
                         "name": "publicIpAddress",
@@ -116,45 +152,12 @@
                             "domainNameLabel": "[concat(basics('vmName'), '-', take(replace(guid(), '-', ''), 10))]"
                         },
                         "options": {
-                            "hideExisting": false,
-                            "hideNone": false
+                            "hideExisting": true,
+                            "hideNone": true
                         },
                         "constraints": {
                             "required": {
                                 "domainNameLabel": true
-                            }
-                        }
-                    },
-                    {
-                        "name": "virtualNetwork",
-                        "type": "Microsoft.Network.VirtualNetworkCombo",
-                        "label": {
-                            "virtualNetwork": "Virtual network",
-                            "subnets": "Subnets"
-                        },
-                        "toolTip": {
-                            "virtualNetwork": "Name of the virtual network",
-                            "subnets": "Subnets for the virtual network"
-                        },
-                        "defaultValue": {
-                            "name": "VirtualNetwork",
-                            "addressPrefixSize": "/16"
-                        },
-                        "constraints": {
-                            "minAddressPrefixSize": "/16"
-                        },
-                        "subnets": {
-                            "subnet1": {
-                                "label": "Subnet",
-                                "defaultValue": {
-                                    "name": "Subnet-1",
-                                    "addressPrefixSize": "/24"
-                                },
-                                "constraints": {
-                                    "minAddressPrefixSize": "/24",
-                                    "minAddressCount": 12,
-                                    "requireContiguousAddresses": false
-                                }
                             }
                         }
                     }
@@ -165,23 +168,11 @@
             "location": "[location()]",
             "vmName": "[basics('vmName')]",
             "adminUsername": "[basics('adminUsername')]",
-            "authenticationType": "[basics('SSHCredentials').authenticationType]",
-            "adminPasswordOrKey": "[coalesce(basics('SSHCredentials').password, basics('SSHCredentials').sshPublicKey)]",
+            "adminPassword": "[basics('password')]",
             "vmSize": "[steps('VirtualMachineConfig').vmSize]",
-            "storageNewOrExisting": "[steps('VirtualMachineConfig').storageAccount.newOrExisting]",
-            "storageAccountName": "[steps('VirtualMachineConfig').storageAccount.name]",
-            "storageAccountType": "[steps('VirtualMachineConfig').storageAccount.type]",
-            "storageAccountResourceGroupName": "[steps('VirtualMachineConfig').storageAccount.resourceGroup]",
-            "virtualNetworkNewOrExisting": "[steps('VirtualMachineConfig').virtualNetwork.newOrExisting]",
-            "virtualNetworkName": "[steps('VirtualMachineConfig').virtualNetwork.name]",
-            "addressPrefixes": "[steps('VirtualMachineConfig').virtualNetwork.addressPrefixes]",
-            "subnetName": "[steps('VirtualMachineConfig').virtualNetwork.subnets.subnet1.name]",
-            "subnetPrefix": "[steps('VirtualMachineConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
-            "virtualNetworkResourceGroupName": "[steps('VirtualMachineConfig').virtualNetwork.resourceGroup]",
-            "publicIpNewOrExisting": "[steps('VirtualMachineConfig').publicIpAddress.newOrExistingOrNone]",
+            "OSVersion": "[steps('VirtualMachineConfig').OSVersion]",
             "publicIpName": "[steps('VirtualMachineConfig').publicIpAddress.name]",
-            "publicIpDns": "[steps('VirtualMachineConfig').publicIpAddress.domainNameLabel]",
-            "publicIpResourceGroupName": "[steps('VirtualMachineConfig').publicIpAddress.resourceGroup]",
+            "dnsLabelPrefix": "[steps('VirtualMachineConfig').publicIpAddress.domainNameLabel]",
             "publicIPAllocationMethod": "[steps('VirtualMachineConfig').publicIpAddress.publicIPAllocationMethod]",
             "publicIpSku": "[steps('VirtualMachineConfig').publicIpAddress.sku]"
         }
