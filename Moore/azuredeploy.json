@@ -52,7 +52,7 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "adminLogin": {
+          "adminUsername": {
             "value": "admingary"
           },
           "adminPassword": {
@@ -62,41 +62,53 @@
               },
               "secretName": "[parameters('secretName')]"
             }
+          },
+          "vmName": {
+              "value": ""
           }
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
           "parameters": {
-            "adminLogin": {
-              "type": "string"
+            "adminUsername": {
+              "type": "string",
+              "metadata": {
+                "description": "User name for the Virtual Machine."
+              }
             },
             "adminPassword": {
               "type": "securestring"
             },
             "location": {
               "type": "string"
+            },
+            "vmName": {
+              "type": "string"
             }
           },
           "variables": {
-            "sqlServerName": "[concat('sql-', uniqueString(resourceGroup().id, 'sql'))]"
+            "vmName": "[concat('vmgary-', uniqueString(resourceGroup().id, 'vm'))]"
           },
           "resources": [
             {
-              "type": "Microsoft.Sql/servers",
-              "apiVersion": "2021-02-01-preview",
-              "name": "[variables('sqlServerName')]",
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2021-03-01",
+              "name": "[variables('vmName')]",
               "location": "[parameters('location')]",
               "properties": {
-                "administratorLogin": "[parameters('adminLogin')]",
-                "administratorLoginPassword": "[parameters('adminPassword')]"
+              },
+              "osProfile": {
+                "computerName": "[parameters('vmName')]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPassword')]"
               }
             }
           ],
           "outputs": {
-            "sqlFQDN": {
+            "vmFQDN": {
               "type": "string",
-              "value": "[reference(variables('sqlServerName')).fullyQualifiedDomainName]"
+              "value": "[reference(variables('vmName')).fullyQualifiedDomainName]"
             }
           }
         }
