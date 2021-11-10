@@ -24,8 +24,8 @@
                 "osPlatform": "Windows",
                 "constraints": {
                     "required": true
-                }
-            },
+                },
+                "visible": false            },
             {
                 "name": "password",
                 "type": "Microsoft.Common.PasswordBox",
@@ -42,7 +42,7 @@
                 "options": {
                     "hideConfirmation": false
                 },
-                "visible": true
+                "visible": false
             }
         ],
         "steps": [
