@@ -40,8 +40,8 @@
                     "allowExisting": true
                 },
                 "location": {
-                    "label": "Custom label for location",
-                    "toolTip": "provide a useful tooltip",
+                    "label": "Region",
+                    "toolTip": "Azure region",
                     "resourceTypes": [
                         "Microsoft.Compute/virtualMachines"
                     ],
