@@ -12,8 +12,16 @@
                 "defaultValue": "simple-vm",
                 "constraints": {
                     "required": true,
-                    "regex": "^[a-z0-9A-Z-]{3,15}$",
-                    "validationMessage": "The VM Name must be between 3 and 15 characters long and contain letters, numbers and hyphens only."
+                    "validations": [
+                        {
+                            "regex": "^[a-z0-9A-Z-]{3,15}$",
+                            "message": "The VM name must start with 'Gary,' be between 3 and 15 characters long and contain letters, numbers and hyphens only."
+                        },
+                        {
+                            "isValid": "[startsWith(steps('resourceConfig').nameInstance, 'Gary')]",
+                            "message": "Must start with 'Gary'."
+                        }
+                    ]
                 }
             },
             {
