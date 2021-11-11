@@ -177,6 +177,7 @@
             "vmName": "[basics('vmName')]",
             "adminUsername": "[basics('adminUsername')]",
             "adminPassword": "[basics('password')]",
+            "scriptParameter": "[basics('scriptParameter')]",
             "vmSize": "[steps('VirtualMachineConfig').vmSize]",
             "OSVersion": "[steps('VirtualMachineConfig').OSVersion]",
             "publicIpName": "[steps('VirtualMachineConfig').publicIpAddress.name]",
