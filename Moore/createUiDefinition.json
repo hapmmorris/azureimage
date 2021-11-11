@@ -9,7 +9,7 @@
                 "type": "Microsoft.Common.TextBox",
                 "label": "Virtual Machine name",
                 "toolTip": "The name of the Virtual Machine.",
-                "defaultValue": "simple-vm",
+                "defaultValue": "gary-vm",
                 "constraints": {
                     "required": true,
                     "validations": [
