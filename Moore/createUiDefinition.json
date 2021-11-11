@@ -15,11 +15,11 @@
                     "validations": [
                         {
                             "regex": "^[a-z0-9A-Z-]{3,15}$",
-                            "message": "The VM name must start with 'Gary,' be between 3 and 15 characters long and contain letters, numbers and hyphens only."
+                            "message": "The VM name must start with 'gary,' be between 3 and 15 characters long and contain letters, numbers and hyphens only."
                         },
                         {
-                            "isValid": "[startsWith(steps('resourceConfig').nameInstance, 'Gary')]",
-                            "message": "Must start with 'Gary'."
+                            "isValid": "[startsWith(steps('basics').vmName, 'gary')]",
+                            "message": "Must start with 'gary'."
                         }
                     ]
                 }
