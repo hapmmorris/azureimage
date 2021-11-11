@@ -36,6 +36,9 @@
       "metadata": {
         "description": "The name of the subscription that contains the keyvault."
       }
+    },
+    "scriptParameter": {
+      "type": "string"
     }
   },
   "resources": [
@@ -47,6 +50,25 @@
         "mode": "Incremental",
         "expressionEvaluationOptions": {
           "scope": "inner"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "scriptParameter": {
+              "value": "[parameters('scriptParameter')]"
+          },
+          "adminUsername": {
+            "value": "admingary"
+          },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+              },
+              "secretName": "[parameters('secretName')]"
+            }
+          }
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
@@ -155,8 +177,7 @@
               "defaultValue": "RunThis.ps1"
             },
             "scriptParameter": {
-              "type": "string",
-              "defaultValue": "NewDirectoryGary"
+              "type": "string"
             }
           },
           "variables": {
@@ -337,6 +358,7 @@
               "properties": {
                 "publisher": "Microsoft.Compute",
                 "type": "CustomScriptExtension",
+                "protectedSettings": {},
                 "typeHandlerVersion": "1.7",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
@@ -350,22 +372,6 @@
             "hostname": {
               "type": "string",
               "value": "[reference(parameters('publicIPName')).dnsSettings.fqdn]"
-            }
-          }
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "adminUsername": {
-            "value": "admingary"
-          },
-          "adminPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              },
-              "secretName": "[parameters('secretName')]"
             }
           }
         }
