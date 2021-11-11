@@ -9,6 +9,21 @@
         "description": "The location where the resources will be deployed."
       }
     },
+    "vmName": {
+      "type": "string"
+    },
+    "vmSize": {
+      "type": "string"
+    },
+    "OSVersion": {
+      "type": "string"
+    },
+    "publicIpName": {
+      "type": "string"
+    },
+    "dnsLabelPrefix": {
+      "type": "string"
+    },
     "vaultName": {
       "type": "string",
       "metadata": {
@@ -54,6 +69,20 @@
         "parameters": {
           "location": {
             "value": "[parameters('location')]"
+          },
+          "vmName": {
+              "value": "[parameters('vmName')]"
+          },
+          "vmSize": {
+              "value": "[parameters('vmSize')]"
+          },"OSVersion": {
+              "value": "[parameters('OSVersion')]"
+          },
+          "publicIpName": {
+              "value": "[parameters('publicIpName')]"
+          },
+          "dnsLabelPrefix": {
+              "value": "[parameters('dnsLabelPrefix')]"
           },
           "scriptParameter": {
               "value": "[parameters('scriptParameter')]"
