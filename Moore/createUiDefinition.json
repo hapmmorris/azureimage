@@ -25,7 +25,8 @@
                 "constraints": {
                     "required": true
                 },
-                "visible": false            },
+                "visible": false
+            },
             {
                 "name": "password",
                 "type": "Microsoft.Common.PasswordBox",
@@ -43,6 +44,13 @@
                     "hideConfirmation": false
                 },
                 "visible": false
+            },
+            {
+                "name": "scriptParameter",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Directory to create",
+                "toolTip": "The directory that will be created at the root.",
+                "defaultValue": "DefaultDirName"
             }
         ],
         "steps": [

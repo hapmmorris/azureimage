@@ -145,6 +145,18 @@
               "metadata": {
                 "description": "Name of the virtual machine."
               }
+            },
+            "scriptFile": {
+              "type": "string",
+              "defaultValue": "https://appgary.blob.core.windows.net/scripts/RunThis.ps1?sp=r&st=2021-11-11T15:08:14Z&se=2021-11-11T23:08:14Z&spr=https&sv=2020-08-04&sr=b&sig=p7HGTgMcWvlfWRSOZERyjnlRdhLktDPikebScBqD5O0%3D"
+            },
+            "scriptName": {
+              "type": "string",
+              "defaultValue": "RunThis.ps1"
+            },
+            "scriptParameter": {
+              "type": "string",
+              "defaultValue": "NewDirectoryGary"
             }
           },
           "variables": {
@@ -311,6 +323,25 @@
                     "enabled": true,
                     "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))).primaryEndpoints.blob]"
                   }
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "name": "[concat(parameters('vmName'),'/CustomScriptExtension')]",
+              "apiVersion": "2015-05-01-preview",
+              "location": "[resourceGroup().location]",
+              "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+              ],
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.7",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                  "fileUris": [ "[parameters('scriptFile')]" ],
+                  "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('scriptParameter'))]"
                 }
               }
             }
