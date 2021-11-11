@@ -10,7 +10,8 @@
       }
     },
     "vmName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "vm-gary-default"
     },
     "vmSize": {
       "type": "string"
