@@ -4,7 +4,7 @@
     "version": "0.1.2-preview",
     "parameters": {
         "config": {
-            "isWizard": false,
+            "isWizard": true,
             "basics": {
                 "description": "Customized description with **markdown**, see [more](https://www.microsoft.com).",
                 "subscription": {
@@ -13,14 +13,6 @@
                             {
                                 "isValid": "[not(contains(subscription().displayName, 'Test'))]",
                                 "message": "Can't use test subscription."
-                            },
-                            {
-                                "permission": "Microsoft.Compute/virtualmachines/write",
-                                "message": "Must have write permission for the virtual machine."
-                            },
-                            {
-                                "permission": "Microsoft.Compute/virtualMachines/extensions/write",
-                                "message": "Must have write permission for the extension."
                             }
                         ]
                     },
