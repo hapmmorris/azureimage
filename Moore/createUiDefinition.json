@@ -11,7 +11,7 @@
                     "constraints": {
                         "validations": [
                             {
-                                "isValid": "[not(contains(subscription().displayName, 'Test'))]",
+                                "isValid": "[not(contains(subscription().displayName.toLower(), 'test'))]",
                                 "message": "Can't use test subscription."
                             }
                         ]
@@ -24,8 +24,8 @@
                     "constraints": {
                         "validations": [
                             {
-                                "isValid": "[not(contains(resourceGroup().name, 'test'))]",
-                                "message": "Resource group name can't contain 'test'."
+                                "isValid": "[not(contains(resourceGroup().name.toLower(), 'test'))]",
+                                "message": "Resource group name can't contain any form of the word 'test'."
                             }
                         ]
                     },
