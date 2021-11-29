@@ -200,7 +200,7 @@
             },
             "scriptFile": {
               "type": "string",
-              "defaultValue": "https://appgary.blob.core.windows.net/scripts/RunThis.ps1?sp=r&st=2021-11-11T15:08:14Z&se=2021-11-11T23:08:14Z&spr=https&sv=2020-08-04&sr=b&sig=p7HGTgMcWvlfWRSOZERyjnlRdhLktDPikebScBqD5O0%3D"
+              "defaultValue": "https://appgary.blob.core.windows.net/scripts?sp=r&st=2021-11-29T18:27:21Z&se=2022-01-01T02:27:21Z&spr=https&sv=2020-08-04&sr=c&sig=aXFgrCwxVqmYpeR9gLHMAE%2FyQ%2BGE1EJBFC54Wn%2Fmc0o%3D"
             },
             "scriptName": {
               "type": "string",
