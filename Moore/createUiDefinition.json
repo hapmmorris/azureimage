@@ -100,7 +100,7 @@
                 "type": "Microsoft.Common.TextBox",
                 "label": "Directory to create",
                 "toolTip": "The directory that will be created at the root.",
-                "defaultValue": "DefaultDirName"
+                "defaultValue": "C:\\DefaultDirName"
             }
         ],
         "steps": [
