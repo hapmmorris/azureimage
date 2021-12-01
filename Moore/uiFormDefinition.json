@@ -60,7 +60,7 @@
                                 "validations": [
                                     {
                                         "regex": "^[a-z0-9A-Z-]{4,15}$",
-                                        "message": "The VM name must start with 'gary,' be between 3 and 15 characters long and contain letters, numbers and hyphens only."
+                                        "message": "The VM name must start with 'gary,' be between 4 and 15 characters long and contain letters, numbers and hyphens only."
                                     },
                                     {
                                         "isValid": "[startsWith(steps('basics').vmName,'gary')]",
