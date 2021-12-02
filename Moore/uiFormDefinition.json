@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom VM Creation - Henry Ford",
+            "title": "Custom VM Creation - HAP",
             "isWizard": true,
             "steps": [
                 {
