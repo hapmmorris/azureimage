@@ -11,10 +11,16 @@
     },
     "vmName": {
       "type": "string",
-      "defaultValue": "vm-gary-default"
+      "defaultValue": "hax"
     },
     "vmSize": {
       "type": "string"
+    },
+    "installiis": {
+      "type": "bool"
+    },
+    "installdotnet35": {
+      "type": "bool"
     },
     "OSVersion": {
       "type": "string"
@@ -72,21 +78,28 @@
             "value": "[parameters('location')]"
           },
           "vmName": {
-              "value": "[parameters('vmName')]"
+            "value": "[parameters('vmName')]"
+          },
+          "installiis": {
+            "value": "[parameters('installiis')]"
+          },
+          "isntalldotnet35": {
+            "value": "[parameters('installdotnet35')]"
           },
           "vmSize": {
-              "value": "[parameters('vmSize')]"
-          },"OSVersion": {
-              "value": "[parameters('OSVersion')]"
+            "value": "[parameters('vmSize')]"
+          },
+          "OSVersion": {
+            "value": "[parameters('OSVersion')]"
           },
           "publicIpName": {
-              "value": "[parameters('publicIpName')]"
+            "value": "[parameters('publicIpName')]"
           },
           "dnsLabelPrefix": {
-              "value": "[parameters('dnsLabelPrefix')]"
+            "value": "[parameters('dnsLabelPrefix')]"
           },
           "scriptParameter": {
-              "value": "[parameters('scriptParameter')]"
+            "value": "[parameters('scriptParameter')]"
           },
           "adminUsername": {
             "value": "admingary"
@@ -198,16 +211,27 @@
                 "description": "Name of the virtual machine."
               }
             },
+            "installiis": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "Install IIS."
+              }
+            },
+            "installdotnet35": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "Install DotNet 3.5."
+              }
+            },
             "scriptFile": {
               "type": "string",
-              "defaultValue": "https://appgary.blob.core.windows.net/scripts/RunThis.ps1?sp=r&st=2021-11-29T18:41:08Z&se=2022-01-01T02:41:08Z&spr=https&sv=2020-08-04&sr=b&sig=ixQVugVWveD%2BrOuh83wnEMLYOge2xIKjFaFexMnLcfA%3D"
+              "defaultValue": "https://savmautomation.blob.core.windows.net/scripts/Main_Script.ps1?sp=r&st=2021-11-29T18:41:08Z&se=2022-01-01T02:41:08Z&spr=https&sv=2020-08-04&sr=b&sig=ixQVugVWveD%2BrOuh83wnEMLYOge2xIKjFaFexMnLcfA%3D"
             },
             "scriptName": {
               "type": "string",
-              "defaultValue": "RunThis.ps1"
-            },
-            "scriptParameter": {
-              "type": "string"
+              "defaultValue": "Main_Script.ps1"
             }
           },
           "variables": {
@@ -353,14 +377,7 @@
                     "managedDisk": {
                       "storageAccountType": "StandardSSD_LRS"
                     }
-                  },
-                  "dataDisks": [
-                    {
-                      "diskSizeGB": 1023,
-                      "lun": 0,
-                      "createOption": "Empty"
-                    }
-                  ]
+                  }
                 },
                 "networkProfile": {
                   "networkInterfaces": [
@@ -393,7 +410,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                   "fileUris": [ "[parameters('scriptFile')]" ],
-                  "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('scriptParameter'))]"
+                  "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('installiis'), ' ', parameters('installdotnet35'))]"
                 }
               }
             }
