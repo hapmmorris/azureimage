@@ -150,6 +150,10 @@
             "storageAccountName": {
               "type": "securestring"
             },
+            "scriptParameter": {
+              "type": "string"
+            },
+
             "vaultSubscription": {
               "type": "string"
             },
