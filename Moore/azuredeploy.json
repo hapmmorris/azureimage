@@ -36,7 +36,7 @@
       "metadata": {
         "description": "The name of the keyvault that contains the secret."
       },
-      "defaultValue": "KeyvaultGary2"
+      "defaultValue": "VMCreationSecrets"
     },
     "secretName": {
       "type": "string",
@@ -102,7 +102,7 @@
             "value": "[parameters('scriptParameter')]"
           },
           "adminUsername": {
-            "value": "admingary"
+            "value": "azure_admin"
           },
           "adminPassword": {
             "reference": {
@@ -110,6 +110,17 @@
                 "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
               },
               "secretName": "[parameters('secretName')]"
+            }
+          },
+          "storageAccountName": {
+            "value": "savmautomation"
+          },
+          "storageAccountKey": {
+            "reference": {
+              "keyVault": {
+                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+              },
+              "secretName": "storageAccountKey"
             }
           }
         },
@@ -130,6 +141,14 @@
                 "description": "Password for the Virtual Machine."
               }
             },
+            "storageAccountName": {
+              "type": "securestring"
+            },
+
+            "storageAccountKey": {
+              "type": "securestring"
+            },
+
             "dnsLabelPrefix": {
               "type": "string",
               "defaultValue": "[toLower(concat(parameters('vmName'),'-', uniqueString(resourceGroup().id, parameters('vmName'))))]",
@@ -405,12 +424,15 @@
               "properties": {
                 "publisher": "Microsoft.Compute",
                 "type": "CustomScriptExtension",
-                "protectedSettings": {},
+                "protectedSettings": {
+                  "fileUris": [ "[parameters('scriptFile')]" ],
+                  "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('installiis'), ' ', parameters('installdotnet35'))]",
+                  "storageAccountName": "[parameters('storageAccountName')]",
+                  "storageAccountKey": "[parameters('storageAccountKey')]"
+                },
                 "typeHandlerVersion": "1.7",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                  "fileUris": [ "[parameters('scriptFile')]" ],
-                  "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('installiis'), ' ', parameters('installdotnet35'))]"
                 }
               }
             }
