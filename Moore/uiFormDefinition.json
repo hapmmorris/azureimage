@@ -93,13 +93,6 @@
                                 "hideConfirmation": false
                             },
                             "visible": false
-                        },
-                        {
-                            "name": "scriptParameter",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Directory to create",
-                            "toolTip": "The directory that will be created at the root.",
-                            "defaultValue": "C:\\DefaultDirName"
                         }
                     ],
                     "description": "Customized description with **markdown**, see [more](https://www.microsoft.com)."
@@ -252,7 +245,6 @@
                 "vmName": "[steps('basics').vmName]",
                 "adminUsername": "[steps('basics').adminUsername]",
                 "adminPassword": "[steps('basics').password]",
-                "scriptParameter": "[steps('basics').scriptParameter]",
                 "vmSize": "[steps('VirtualMachineConfig').vmSize]",
                 "installiis": "[steps('VirtualMachineConfig').installiis]",
                 "installdotnet35": "[steps('VirtualMachineConfig').installdotnet35]",

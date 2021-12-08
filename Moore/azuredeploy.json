@@ -58,9 +58,6 @@
       "metadata": {
         "description": "The name of the subscription that contains the keyvault."
       }
-    },
-    "scriptParameter": {
-      "type": "string"
     }
   },
   "resources": [
@@ -97,9 +94,6 @@
           },
           "dnsLabelPrefix": {
             "value": "[parameters('dnsLabelPrefix')]"
-          },
-          "scriptParameter": {
-            "value": "[parameters('scriptParameter')]"
           },
           "vaultSubscription": {
             "value": "08aa9053-413c-4f89-b5e0-4703c77324a8"
@@ -149,9 +143,6 @@
             },
             "storageAccountName": {
               "type": "securestring"
-            },
-            "scriptParameter": {
-              "type": "string"
             },
 
             "vaultSubscription": {
