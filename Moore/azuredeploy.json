@@ -83,7 +83,7 @@
           "installiis": {
             "value": "[parameters('installiis')]"
           },
-          "isntalldotnet35": {
+          "installdotnet35": {
             "value": "[parameters('installdotnet35')]"
           },
           "vmSize": {
