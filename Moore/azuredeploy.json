@@ -54,7 +54,7 @@
     },
     "vaultSubscription": {
       "type": "string",
-      "defaultValue": "[subscription().subscriptionId]",
+      "defaultValue": "08aa9053-413c-4f89-b5e0-4703c77324a8",
       "metadata": {
         "description": "The name of the subscription that contains the keyvault."
       }
