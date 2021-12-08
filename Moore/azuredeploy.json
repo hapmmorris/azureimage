@@ -101,6 +101,12 @@
           "scriptParameter": {
             "value": "[parameters('scriptParameter')]"
           },
+          "vaultSubscription": {
+            "value": "[parameters('vaultSubscription')]"
+          },
+          "vaultResourceGroupName": {
+            "value": "[parameters('vaultResourceGroupName')]"
+          },
           "adminUsername": {
             "value": "azure_admin"
           },
