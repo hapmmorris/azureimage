@@ -102,7 +102,7 @@
             "value": "[parameters('scriptParameter')]"
           },
           "vaultSubscription": {
-            "value": "[parameters('vaultSubscription')]"
+            "value": "08aa9053-413c-4f89-b5e0-4703c77324a8"
           },
           "vaultResourceGroupName": {
             "value": "[parameters('vaultResourceGroupName')]"
