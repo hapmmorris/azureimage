@@ -107,6 +107,44 @@
                     "bladeTitle": "Virtual Machine Settings",
                     "elements": [
                         {
+                        "name": "vnet",
+                        "type": "Microsoft.Network.VirtualNetworkCombo",
+                        "label": {
+                            "virtualNetwork": "Select an Existing VNet",
+                            "subnets": "Select an existing subnet"
+                        },
+                        "toolTip": {
+                            "virtualNetwork": "Creating a new VNet is not allowed, attempts to do so will fail",
+                            "subnets": "Must select an existing subnet"
+                        },
+                        "defaultValue": {
+                            "name": "PleaseSelectAValidVNet",
+                            "addressPrefixSize": "/24"
+                        },
+                        "constraints": {
+                            "minAddressPrefixSize": "/24",
+                            "validations": [
+                                {
+                                    "isValid": "[not(startsWith(steps('VirtualMachineConfig').vnet.name,'PleaseSelectAValid'))]",
+                                    "message": "Please select a valid VNet and subnet."
+                                }
+                            ]
+                        },
+                        "options": {
+                            "hideExisting": false
+                        },
+                        "subnets": {
+                            "subnet1": {
+                                "label": "Subnet",
+                                "constraints": {
+                                    "minAddressPrefixSize": "/24"
+                                }
+                            }
+                        },
+                        "visible": true
+                    },
+
+                        {
                             "name": "OSVersion",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Windows OS Version",
