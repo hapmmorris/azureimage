@@ -25,11 +25,25 @@
     "OSVersion": {
       "type": "string"
     },
-    "publicIpName": {
-      "type": "string"
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "NotARealVNet1",
+      "metadata": {
+        "description": "New or Existing VNet Name"
+      }
     },
-    "dnsLabelPrefix": {
-      "type": "string"
+    "virtualNetworkResourceGroup": {
+      "type": "string",
+      "defaultValue": "fakerg",
+      "metadata": {
+        "description": "Resource group of the VNet"
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "New or Existing subnet Name"
+      }
     },
     "vaultName": {
       "type": "string",
@@ -89,16 +103,20 @@
           "OSVersion": {
             "value": "[parameters('OSVersion')]"
           },
-          "publicIpName": {
-            "value": "[parameters('publicIpName')]"
+          "virtualNetworkName": {
+            "value": "[parameters('virtualNetworkName')]"
           },
-          "dnsLabelPrefix": {
-            "value": "[parameters('dnsLabelPrefix')]"
+          "virtualNetworkResourceGroup": {
+            "value": "[parameters('virtualNetworkResourceGroup')]"
+          },
+          "subnetName": {
+            "value": "[parameters('subnetName')]"
           },
           "vaultSubscription": {
             "value": "08aa9053-413c-4f89-b5e0-4703c77324a8"
           },
-            "value": "[parameters('scriptParameter')]"
+          "vaultResourceGroupName": {
+            "value": "[parameters('vaultResourceGroupName')]"
           },
           "adminUsername": {
             "value": "azure_admin"
@@ -153,44 +171,6 @@
             "storageAccountKey": {
               "type": "securestring"
             },
-
-            "dnsLabelPrefix": {
-              "type": "string",
-              "defaultValue": "[toLower(concat(parameters('vmName'),'-', uniqueString(resourceGroup().id, parameters('vmName'))))]",
-              "metadata": {
-                "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
-              }
-            },
-            "publicIpName": {
-              "type": "string",
-              "defaultValue": "myPublicIP",
-              "metadata": {
-                "description": "Name for the Public IP used to access the Virtual Machine."
-              }
-            },
-            "publicIPAllocationMethod": {
-              "type": "string",
-              "defaultValue": "Dynamic",
-              "allowedValues": [
-                "Dynamic",
-                "Static"
-              ],
-              "metadata": {
-                "description": "Allocation method for the Public IP used to access the Virtual Machine."
-              }
-            },
-            "publicIpSku": {
-              "type": "string",
-              "defaultValue": "Basic",
-              "allowedValues": [
-                "Basic",
-                "Standard"
-              ],
-              "metadata": {
-                "description": "SKU for the Public IP used to access the Virtual Machine."
-              }
-            },
-
             "OSVersion": {
               "type": "string",
               "defaultValue": "2019-Datacenter",
@@ -249,6 +229,25 @@
                 "description": "Install DotNet 3.5."
               }
             },
+            "virtualNetworkName": {
+              "type": "string",
+              "defaultValue": "abcde",
+              "metadata": {
+                "description": "New or Existing VNet Name"
+              }
+            },
+            "virtualNetworkResourceGroup": {
+              "type": "string",
+              "metadata": {
+                "description": "Resource group of the VNet"
+              }
+            },
+            "subnetName": {
+              "type": "string",
+              "metadata": {
+                "description": "New or Existing subnet Name"
+              }
+            },
             "scriptFile": {
               "type": "string",
               "defaultValue": "https://savmautomation.blob.core.windows.net/scripts/Main_Script.ps1?sp=r&st=2021-11-29T18:41:08Z&se=2022-01-01T02:41:08Z&spr=https&sv=2020-08-04&sr=b&sig=ixQVugVWveD%2BrOuh83wnEMLYOge2xIKjFaFexMnLcfA%3D"
@@ -260,13 +259,9 @@
           },
           "variables": {
             "storageAccountName": "[concat('bootdiags', uniquestring(resourceGroup().id))]",
-            "nicName": "myVMNic",
-            "addressPrefix": "10.0.0.0/16",
-            "subnetName": "Subnet",
-            "subnetPrefix": "10.0.0.0/24",
-            "virtualNetworkName": "MyVNET",
-            "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
-            "networkSecurityGroupName": "default-NSG"
+            "nicName": "[concat(parameters('vmName'), '-NIC')]",
+            "vnetId": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+            "subnetId": "[concat(variables('vnetId'),'/subnets/',parameters('subnetName'))]"
           },
           "resources": [
             {
@@ -281,90 +276,19 @@
               "properties": {}
             },
             {
-              "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2020-06-01",
-              "name": "[parameters('publicIPName')]",
-              "location": "[parameters('location')]",
-              "sku": {
-                "name": "[parameters('publicIpSku')]"
-              },
-              "properties": {
-                "publicIPAllocationMethod": "[parameters('publicIPAllocationMethod')]",
-                "dnsSettings": {
-                  "domainNameLabel": "[parameters('dnsLabelPrefix')]"
-                }
-              }
-            },
-            {
-              "type": "Microsoft.Network/networkSecurityGroups",
-              "apiVersion": "2020-06-01",
-              "name": "[variables('networkSecurityGroupName')]",
-              "location": "[parameters('location')]",
-              "properties": {
-                "securityRules": [
-                  {
-                    "name": "default-allow-3389",
-                    "properties": {
-                      "priority": 1000,
-                      "access": "Allow",
-                      "direction": "Inbound",
-                      "destinationPortRange": "3389",
-                      "protocol": "Tcp",
-                      "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "type": "Microsoft.Network/virtualNetworks",
-              "apiVersion": "2020-06-01",
-              "name": "[variables('virtualNetworkName')]",
-              "location": "[parameters('location')]",
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-              ],
-              "properties": {
-                "addressSpace": {
-                  "addressPrefixes": [
-                    "[variables('addressPrefix')]"
-                  ]
-                },
-                "subnets": [
-                  {
-                    "name": "[variables('subnetName')]",
-                    "properties": {
-                      "addressPrefix": "[variables('subnetPrefix')]",
-                      "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-                      }
-                    }
-                  }
-                ]
-              }
-            },
-            {
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2020-06-01",
               "name": "[variables('nicName')]",
               "location": "[parameters('location')]",
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]"
-              ],
+              "dependsOn": [],
               "properties": {
                 "ipConfigurations": [
                   {
                     "name": "ipconfig1",
                     "properties": {
                       "privateIPAllocationMethod": "Dynamic",
-                      "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPName'))]"
-                      },
                       "subnet": {
-                        "id": "[variables('subnetRef')]"
+                        "id": "[variables('subnetId')]"
                       }
                     }
                   }
@@ -443,10 +367,6 @@
             }
           ],
           "outputs": {
-            "hostname": {
-              "type": "string",
-              "value": "[reference(parameters('publicIPName')).dnsSettings.fqdn]"
-            }
           }
         }
       }
