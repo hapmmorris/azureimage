@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom VM Creation - HAP!",
+            "title": "Custom VM Creation - HAP",
             "isWizard": true,
             "steps": [
                 {
@@ -45,7 +45,7 @@
                                 ],
                                 "allowedValues": [
                                     "eastus",
-                                    "eastus2"
+                                    "westus2"
                                 ]
                             }
                         },
@@ -54,13 +54,17 @@
                             "type": "Microsoft.Common.TextBox",
                             "label": "Virtual Machine name",
                             "toolTip": "The name of the Virtual Machine.",
-                            "defaultValue": "hax",
+                            "defaultValue": "gary-vm",
                             "constraints": {
                                 "required": true,
                                 "validations": [
                                     {
-                                        "isValid": "[startsWith(steps('basics').vmName,'hax')]",
-                                        "message": "Must start with 'hax'. Next letter is first letter of environment type.(P for Prod, D for dev...)"
+                                        "regex": "^[a-z0-9A-Z-]{4,15}$",
+                                        "message": "The VM name must start with 'gary,' be between 4 and 15 characters long and contain letters, numbers and hyphens only."
+                                    },
+                                    {
+                                        "isValid": "[startsWith(steps('basics').vmName,'gary')]",
+                                        "message": "Must start with 'gary'."
                                     }
                                 ]
                             }
@@ -93,6 +97,13 @@
                                 "hideConfirmation": false
                             },
                             "visible": false
+                        },
+                        {
+                            "name": "scriptParameter",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Directory to create",
+                            "toolTip": "The directory that will be created at the root.",
+                            "defaultValue": "C:\\DefaultDirName"
                         }
                     ],
                     "description": "Customized description with **markdown**, see [more](https://www.microsoft.com)."
@@ -107,43 +118,42 @@
                     "bladeTitle": "Virtual Machine Settings",
                     "elements": [
                         {
-                        "name": "vnet",
-                        "type": "Microsoft.Network.VirtualNetworkCombo",
-                        "label": {
-                            "virtualNetwork": "Select an Existing VNet",
-                            "subnets": "Select an existing subnet"
-                        },
-                        "toolTip": {
-                            "virtualNetwork": "Creating a new VNet is not allowed, attempts to do so will fail",
-                            "subnets": "Must select an existing subnet"
-                        },
-                        "defaultValue": {
-                            "name": "PleaseSelectAValidVNet",
-                            "addressPrefixSize": "/24"
-                        },
-                        "constraints": {
-                            "minAddressPrefixSize": "/24",
-                            "validations": [
-                                {
-                                    "isValid": "[not(startsWith(steps('VirtualMachineConfig').vnet.name,'PleaseSelectAValid'))]",
-                                    "message": "Please select a valid VNet and subnet."
+                            "name": "vnet",
+                            "type": "Microsoft.Network.VirtualNetworkCombo",
+                            "label": {
+                                "virtualNetwork": "Select an Existing VNet",
+                                "subnets": "Select an existing subnet"
+                            },
+                            "toolTip": {
+                                "virtualNetwork": "Creating a new VNet is not allowed, attempts to do so will fail",
+                                "subnets": "Must select an existing subnet"
+                            },
+                            "defaultValue": {
+                                "name": "PleaseSelectAValidVNet",
+                                "addressPrefixSize": "/24"
+                            },
+                            "constraints": {
+                                "minAddressPrefixSize": "/24",
+                                "validations": [
+                                    {
+                                        "isValid": "[not(startsWith(steps('VirtualMachineConfig').vnet.name,'PleaseSelectAValid'))]",
+                                        "message": "Please select a valid VNet and subnet."
+                                    }
+                                ]
+                            },
+                            "options": {
+                                "hideExisting": false
+                            },
+                            "subnets": {
+                                "subnet1": {
+                                    "label": "Subnet",
+                                    "constraints": {
+                                        "minAddressPrefixSize": "/24"
+                                    }
                                 }
-                            ]
+                            },
+                            "visible": true
                         },
-                        "options": {
-                            "hideExisting": false
-                        },
-                        "subnets": {
-                            "subnet1": {
-                                "label": "Subnet",
-                                "constraints": {
-                                    "minAddressPrefixSize": "/24"
-                                }
-                            }
-                        },
-                        "visible": true
-                    },
-
                         {
                             "name": "OSVersion",
                             "type": "Microsoft.Common.DropDown",
@@ -230,18 +240,35 @@
                             }
                         },
                         {
-                            "name": "installiis",
-                            "type": "Microsoft.Common.CheckBox",
-                            "label": "Install IIS?",
-                            "toolTip": "Would you like IIS Installed.",
-                            "defaultValue": false
-                        },
-                        {
-                            "name": "installdotnet35",
-                            "type": "Microsoft.Common.CheckBox",
-                            "label": "Install DotNet3.5?",
-                            "toolTip": "Would you like DotNet3.5 Installed.",
-                            "defaultValue": false
+                            "name": "publicIpAddress",
+                            "type": "Microsoft.Network.PublicIpAddressCombo",
+                            "label": {
+                                "publicIpAddress": "Public IP Address for the VM",
+                                "domainNameLabel": "DNS Prefix for the public IP Address"
+                            },
+                            "toolTip": {
+                                "publicIpAddress": "Public IP Address for the VM",
+                                "domainNameLabel": "DNS Prefix for the public IP Address, must be globally unique"
+                            },
+                            "defaultValue": {
+                                "publicIpAddressName": "[concat(steps('basics').vmName,'-ip')]",
+                                "domainNameLabel": "[concat(steps('basics').vmName,'-',take(replace(guid(),'-',''),10))]"
+                            },
+                            "options": {
+                                "hideExisting": true,
+                                "hideNone": true
+                            },
+                            "constraints": {
+                                "required": {
+                                    "domainNameLabel": true
+                                }
+                            },
+                            "scope": {
+                                "subscriptionId": "[steps('basics').resourceScope.subscription.subscriptionId]",
+                                "resourceGroupName": "[steps('basics').resourceScope.resourceGroup.name]",
+                                "location": "[steps('basics').resourceScope.location.name]"
+                            },
+                            "visible": false
                         }
                     ]
                 }
@@ -253,6 +280,7 @@
                 "vmName": "[steps('basics').vmName]",
                 "adminUsername": "[steps('basics').adminUsername]",
                 "adminPassword": "[steps('basics').password]",
+                "scriptParameter": "[steps('basics').scriptParameter]",
                 "virtualNetworkName": "[steps('VirtualMachineConfig').vnet.name]",
                 "virtualNetworkNewOrExisting": "[steps('VirtualMachineConfig').vnet.newOrExisting]",
                 "virtualNetworkAddressPrefix": "[first(steps('VirtualMachineConfig').vnet.addressPrefixes)]",
@@ -260,8 +288,6 @@
                 "subnetName": "[steps('VirtualMachineConfig').vnet.subnets.subnet1.name]",
                 "subnetAddressPrefix": "[steps('VirtualMachineConfig').vnet.subnets.subnet1.addressPrefix]",
                 "vmSize": "[steps('VirtualMachineConfig').vmSize]",
-                "installiis": "[steps('VirtualMachineConfig').installiis]",
-                "installdotnet35": "[steps('VirtualMachineConfig').installdotnet35]",
                 "OSVersion": "[steps('VirtualMachineConfig').OSVersion]"
             },
             "kind": "ResourceGroup",
