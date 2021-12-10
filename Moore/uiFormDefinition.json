@@ -107,43 +107,6 @@
                     "bladeTitle": "Virtual Machine Settings",
                     "elements": [
                         {
-                            "name": "vnet",
-                            "type": "Microsoft.Network.VirtualNetworkCombo",
-                            "label": {
-                                "virtualNetwork": "Select an Existing VNet",
-                                "subnets": "Select an existing subnet"
-                            },
-                            "toolTip": {
-                                "virtualNetwork": "Creating a new VNet is not allowed, attempts to do so will fail",
-                                "subnets": "Must select an existing subnet"
-                            },
-                            "defaultValue": {
-                                "name": "PleaseSelectAValidVNet",
-                                "addressPrefixSize": "/24"
-                            },
-                            "constraints": {
-                                "minAddressPrefixSize": "/24",
-                                "validations": [
-                                    {
-                                        "isValid": "[not(startsWith(steps('VirtualMachineConfig').vnet.name,'PleaseSelectAValid'))]",
-                                        "message": "Please select a valid VNet and subnet."
-                                    }
-                                ]
-                            },
-                            "options": {
-                                "hideExisting": false
-                            },
-                            "subnets": {
-                                "subnet1": {
-                                    "label": "Subnet",
-                                    "constraints": {
-                                        "minAddressPrefixSize": "/24"
-                                    }
-                                }
-                            },
-                            "visible": true
-                        },
-                        {
                             "name": "OSVersion",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Windows OS Version",
@@ -282,12 +245,6 @@
                 "vmName": "[steps('basics').vmName]",
                 "adminUsername": "[steps('basics').adminUsername]",
                 "adminPassword": "[steps('basics').password]",
-                "virtualNetworkName": "[steps('VirtualMachineConfig').vnet.name]",
-                "virtualNetworkNewOrExisting": "[steps('VirtualMachineConfig').vnet.newOrExisting]",
-                "virtualNetworkAddressPrefix": "[first(steps('VirtualMachineConfig').vnet.addressPrefixes)]",
-                "virtualNetworkResourceGroup": "[steps('VirtualMachineConfig').vnet.resourceGroup]",
-                "subnetName": "[steps('VirtualMachineConfig').vnet.subnets.subnet1.name]",
-                "subnetAddressPrefix": "[steps('VirtualMachineConfig').vnet.subnets.subnet1.addressPrefix]",
                 "vmSize": "[steps('VirtualMachineConfig').vmSize]",
                 "installiis": "[steps('VirtualMachineConfig').installiis]",
                 "installdotnet35": "[steps('VirtualMachineConfig').installdotnet35]",
