@@ -280,7 +280,6 @@
                 "vmName": "[steps('basics').vmName]",
                 "adminUsername": "[steps('basics').adminUsername]",
                 "adminPassword": "[steps('basics').password]",
-                "scriptParameter": "[steps('basics').scriptParameter]",
                 "virtualNetworkName": "[steps('VirtualMachineConfig').vnet.name]",
                 "virtualNetworkNewOrExisting": "[steps('VirtualMachineConfig').vnet.newOrExisting]",
                 "virtualNetworkAddressPrefix": "[first(steps('VirtualMachineConfig').vnet.addressPrefixes)]",
@@ -288,6 +287,8 @@
                 "subnetName": "[steps('VirtualMachineConfig').vnet.subnets.subnet1.name]",
                 "subnetAddressPrefix": "[steps('VirtualMachineConfig').vnet.subnets.subnet1.addressPrefix]",
                 "vmSize": "[steps('VirtualMachineConfig').vmSize]",
+                "installiis": "[steps('VirtualMachineConfig').installiis]",
+                "installdotnet35": "[steps('VirtualMachineConfig').installdotnet35]",
                 "OSVersion": "[steps('VirtualMachineConfig').OSVersion]"
             },
             "kind": "ResourceGroup",
