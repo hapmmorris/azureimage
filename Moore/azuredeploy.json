@@ -11,16 +11,10 @@
     },
     "vmName": {
       "type": "string",
-      "defaultValue": "hax"
+      "defaultValue": "vm-gary-default"
     },
     "vmSize": {
       "type": "string"
-    },
-    "installiis": {
-      "type": "bool"
-    },
-    "installdotnet35": {
-      "type": "bool"
     },
     "OSVersion": {
       "type": "string"
@@ -50,7 +44,7 @@
       "metadata": {
         "description": "The name of the keyvault that contains the secret."
       },
-      "defaultValue": "VMCreationSecrets"
+      "defaultValue": "KeyvaultGary"
     },
     "secretName": {
       "type": "string",
@@ -64,14 +58,17 @@
       "metadata": {
         "description": "The name of the resource group that contains the keyvault."
       },
-      "defaultValue": "VM_Automation"
+      "defaultValue": "HenryFord"
     },
     "vaultSubscription": {
       "type": "string",
-      "defaultValue": "08aa9053-413c-4f89-b5e0-4703c77324a8",
+      "defaultValue": "[subscription().subscriptionId]",
       "metadata": {
         "description": "The name of the subscription that contains the keyvault."
       }
+    },
+    "scriptParameter": {
+      "type": "string"
     }
   },
   "resources": [
@@ -91,12 +88,6 @@
           "vmName": {
             "value": "[parameters('vmName')]"
           },
-          "installiis": {
-            "value": "[parameters('installiis')]"
-          },
-          "installdotnet35": {
-            "value": "[parameters('installdotnet35')]"
-          },
           "vmSize": {
             "value": "[parameters('vmSize')]"
           },
@@ -112,14 +103,11 @@
           "subnetName": {
             "value": "[parameters('subnetName')]"
           },
-          "vaultSubscription": {
-            "value": "08aa9053-413c-4f89-b5e0-4703c77324a8"
-          },
-          "vaultResourceGroupName": {
-            "value": "VM_Automation"
+          "scriptParameter": {
+            "value": "[parameters('scriptParameter')]"
           },
           "adminUsername": {
-            "value": "azure_admin"
+            "value": "admingary"
           },
           "adminPassword": {
             "reference": {
@@ -128,9 +116,6 @@
               },
               "secretName": "[parameters('secretName')]"
             }
-          },
-          "storageAccountName": {
-            "value": "savmautomation"
           },
           "storageAccountKey": {
             "reference": {
@@ -157,16 +142,6 @@
               "metadata": {
                 "description": "Password for the Virtual Machine."
               }
-            },
-            "storageAccountName": {
-              "type": "securestring"
-            },
-
-            "vaultSubscription": {
-              "type": "string"
-            },
-            "vaultResourceGroupName": {
-              "type": "string"
             },
             "storageAccountKey": {
               "type": "securestring"
@@ -215,20 +190,6 @@
                 "description": "Name of the virtual machine."
               }
             },
-            "installiis": {
-              "type": "bool",
-              "defaultValue": false,
-              "metadata": {
-                "description": "Install IIS."
-              }
-            },
-            "installdotnet35": {
-              "type": "bool",
-              "defaultValue": false,
-              "metadata": {
-                "description": "Install DotNet 3.5."
-              }
-            },
             "virtualNetworkName": {
               "type": "string",
               "defaultValue": "abcde",
@@ -250,11 +211,14 @@
             },
             "scriptFile": {
               "type": "string",
-              "defaultValue": "https://savmautomation.blob.core.windows.net/scripts/Main_Script.ps1?sp=r&st=2021-11-29T18:41:08Z&se=2022-01-01T02:41:08Z&spr=https&sv=2020-08-04&sr=b&sig=ixQVugVWveD%2BrOuh83wnEMLYOge2xIKjFaFexMnLcfA%3D"
+              "defaultValue": "https://customscriptsgary.blob.core.windows.net/scripts/RunThis.ps1"
             },
             "scriptName": {
               "type": "string",
-              "defaultValue": "Main_Script.ps1"
+              "defaultValue": "RunThis.ps1"
+            },
+            "scriptParameter": {
+              "type": "string"
             }
           },
           "variables": {
@@ -325,7 +289,14 @@
                     "managedDisk": {
                       "storageAccountType": "StandardSSD_LRS"
                     }
-                  }
+                  },
+                  "dataDisks": [
+                    {
+                      "diskSizeGB": 1023,
+                      "lun": 0,
+                      "createOption": "Empty"
+                    }
+                  ]
                 },
                 "networkProfile": {
                   "networkInterfaces": [
@@ -355,8 +326,8 @@
                 "type": "CustomScriptExtension",
                 "protectedSettings": {
                   "fileUris": [ "[parameters('scriptFile')]" ],
-                  "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('installiis'), ' ', parameters('installdotnet35'))]",
-                  "storageAccountName": "[parameters('storageAccountName')]",
+                  "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('scriptParameter'))]",
+                  "storageAccountName": "customscriptsgary",
                   "storageAccountKey": "[parameters('storageAccountKey')]"
                 },
                 "typeHandlerVersion": "1.7",
