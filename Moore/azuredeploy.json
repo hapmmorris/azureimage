@@ -107,7 +107,7 @@
             "value": "[parameters('scriptParameter')]"
           },
           "adminUsername": {
-            "value": "admingary"
+            "value": "azure_admin"
           },
           "adminPassword": {
             "reference": {
