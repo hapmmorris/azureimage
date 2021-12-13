@@ -45,7 +45,7 @@
                                 ],
                                 "allowedValues": [
                                     "eastus",
-                                    "westus2"
+                                    "eastus2"
                                 ]
                             }
                         },
@@ -54,17 +54,17 @@
                             "type": "Microsoft.Common.TextBox",
                             "label": "Virtual Machine name",
                             "toolTip": "The name of the Virtual Machine.",
-                            "defaultValue": "gary-vm",
+                            "defaultValue": "hax",
                             "constraints": {
                                 "required": true,
                                 "validations": [
                                     {
                                         "regex": "^[a-z0-9A-Z-]{4,15}$",
-                                        "message": "The VM name must start with 'gary,' be between 4 and 15 characters long and contain letters, numbers and hyphens only."
+                                        "message": "The VM name must start with 'hax,' be between 4 and 15 characters long and contain letters, numbers and hyphens only."
                                     },
                                     {
-                                        "isValid": "[startsWith(steps('basics').vmName,'gary')]",
-                                        "message": "Must start with 'gary'."
+                                        "isValid": "[startsWith(steps('basics').vmName,'hax')]",
+                                        "message": "Must start with 'hax'."
                                     }
                                 ]
                             }
