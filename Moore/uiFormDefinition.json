@@ -97,13 +97,6 @@
                                 "hideConfirmation": false
                             },
                             "visible": false
-                        },
-                        {
-                            "name": "scriptParameter",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Directory to create",
-                            "toolTip": "The directory that will be created at the root.",
-                            "defaultValue": "C:\\DefaultDirName"
                         }
                     ],
                     "description": "Customized description with **markdown**, see [more](https://www.microsoft.com)."
