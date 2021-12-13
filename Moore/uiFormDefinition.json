@@ -240,6 +240,20 @@
                             }
                         },
                         {
+                            "name": "installiis",
+                            "type": "Microsoft.Common.CheckBox",
+                            "label": "Install IIS?",
+                            "toolTip": "Would you like IIS Installed.",
+                            "defaultValue": false
+                        },
+                        {
+                            "name": "installdotnet35",
+                            "type": "Microsoft.Common.CheckBox",
+                            "label": "Install DotNet3.5?",
+                            "toolTip": "Would you like DotNet3.5 Installed.",
+                            "defaultValue": false
+                        },
+                        {
                             "name": "publicIpAddress",
                             "type": "Microsoft.Network.PublicIpAddressCombo",
                             "label": {
