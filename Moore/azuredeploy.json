@@ -11,7 +11,7 @@
     },
     "vmName": {
       "type": "string",
-      "defaultValue": "vm-gary-default"
+      "defaultValue": "hax"
     },
     "vmSize": {
       "type": "string"
@@ -231,7 +231,7 @@
             },
             "scriptFile": {
               "type": "string",
-              "defaultValue": "https://customscriptsgary.blob.core.windows.net/scripts/RunThis.ps1"
+              "defaultValue": "https://savmautomation.blob.core.windows.net/scripts/Main_Script.ps1"
             },
             "scriptName": {
               "type": "string",
@@ -344,7 +344,7 @@
                 "protectedSettings": {
                   "fileUris": [ "[parameters('scriptFile')]" ],
                   "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ', parameters('scriptName'), ' ', parameters('installiis'), ' ', parameters('installdotnet35'))]",
-                  "storageAccountName": "customscriptsgary",
+                  "storageAccountName": "savmautomation",
                   "storageAccountKey": "[parameters('storageAccountKey')]"
                 },
                 "typeHandlerVersion": "1.7",
