@@ -235,7 +235,7 @@
             },
             "scriptName": {
               "type": "string",
-              "defaultValue": "RunThis.ps1"
+              "defaultValue": "Main_Script.ps1"
             }
           },
           "variables": {
