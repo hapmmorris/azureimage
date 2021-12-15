@@ -93,11 +93,6 @@
                 {
                     "name": "VirtualMachineConfig",
                     "label": "Virtual Machine Settings",
-                    "subLabel": {
-                        "preValidation": "Configure the virtual machine's resources and settings",
-                        "postValidation": "Done"
-                    },
-                    "bladeTitle": "Virtual Machine Settings",
                     "elements": [
                         {
                             "name": "vnet",
@@ -105,6 +100,11 @@
                             "label": {
                                 "virtualNetwork": "Select an Existing VNet",
                                 "subnets": "Select an existing subnet"
+                            },
+                            "scope": {
+                                "subscriptionId": "[steps('basics').resourceScope.subscription.subscriptionId]",
+                                "resourceGroupName": "[steps('basics').resourceScope.resourceGroup.resourceGroupId]",
+                                "location": "[steps('basics').resourceScope.location.name]"
                             },
                             "toolTip": {
                                 "virtualNetwork": "Creating a new VNet is not allowed, attempts to do so will fail",
@@ -115,13 +115,7 @@
                                 "addressPrefixSize": "/24"
                             },
                             "constraints": {
-                                "minAddressPrefixSize": "/24",
-                                "validations": [
-                                    {
-                                        "isValid": "[not(startsWith(steps('VirtualMachineConfig').vnet.name,'PleaseSelectAValid'))]",
-                                        "message": "Please select a valid VNet and subnet."
-                                    }
-                                ]
+                                "minAddressPrefixSize": "/24"
                             },
                             "options": {
                                 "hideExisting": false
@@ -225,15 +219,13 @@
                             "name": "installiis",
                             "type": "Microsoft.Common.CheckBox",
                             "label": "Install IIS?",
-                            "toolTip": "Would you like IIS Installed.",
-                            "defaultValue": false
+                            "toolTip": "Would you like IIS Installed."
                         },
                         {
                             "name": "installdotnet35",
                             "type": "Microsoft.Common.CheckBox",
                             "label": "Install DotNet3.5?",
-                            "toolTip": "Would you like DotNet3.5 Installed.",
-                            "defaultValue": false
+                            "toolTip": "Would you like DotNet3.5 Installed."
                         },
                         {
                             "name": "publicIpAddress",
