@@ -26,17 +26,6 @@
                                     "Microsoft.Compute"
                                 ]
                             },
-                            "resourceGroup": {
-                                "constraints": {
-                                    "validations": [
-                                        {
-                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope.resourceGroup.name),'test'))]",
-                                            "message": "Resource group name can't contain any form of the word 'test'."
-                                        }
-                                    ]
-                                },
-                                "allowExisting": true
-                            },
                             "location": {
                                 "label": "Region",
                                 "toolTip": "Azure region",
@@ -60,7 +49,7 @@
                                 "validations": [
                                     {
                                         "regex": "^[a-z0-9A-Z-]{4,15}$",
-                                        "message": "The VM name must start with 'hax,' be between 4 and 15 characters long and contain letters, numbers and hyphens only."
+                                        "message": "The VM name must start with 'hax,' followed by a single letter to determine environment type P=Prod, D=Dev... etc."
                                     },
                                     {
                                         "isValid": "[startsWith(steps('basics').vmName,'hax')]",
